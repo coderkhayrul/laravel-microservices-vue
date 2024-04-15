@@ -67,7 +67,6 @@ export default {
             console.log((await result).data.message);
             await this.$router.push('login');
         },
-
     },
 
 

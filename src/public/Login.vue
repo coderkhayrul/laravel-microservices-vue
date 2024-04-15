@@ -17,7 +17,9 @@ export default {
                 email: email.value,
                 password: password.value,
             });
-            localStorage.setItem('token', result.data.token);
+            console.log(result.data);
+            localStorage.setItem('token', result.data.data.token);
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + result.data.data.token;
             await router.push('/');
         }
 
