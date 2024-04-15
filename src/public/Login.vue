@@ -1,24 +1,45 @@
 <script>
+
+import axios from 'axios';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 export default {
     name: 'Login',
+
+    setup() {
+        const email = ref('');
+        const password = ref('');
+        const router = useRouter();
+
+        const submit = async () => {
+            const result = await axios.post('login', {
+                email: email.value,
+                password: password.value,
+            });
+            localStorage.setItem('token', result.data.token);
+            await router.push('/');
+        }
+
+        return {
+            email,
+            password,
+            submit,
+        }
+    }
+
 }
 </script>
 
 <template>
-    <form class="form-signin">
-        <img class="mb-4" src="/docs/4.5/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <form class="form-signin" @submit.prevent="submit">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-        <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" value="remember-me"> Remember me
-            </label>
-        </div>
+        <label for="email" class="sr-only">Email address</label>
+        <input v-model="email" type="email" id="email" class="form-control" placeholder="Email address" required
+            autofocus>
+        <label for="password" class="sr-only">Password</label>
+        <input v-model="password" type="password" id="password" class="form-control" placeholder="Password" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        <p class="mt-5 mb-3 text-muted">&copy; 2017-2020</p>
     </form>
 </template>
 

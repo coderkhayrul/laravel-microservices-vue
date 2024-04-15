@@ -24,6 +24,11 @@
             <input v-model="passwordConfirm" type="password" id="passwordConfirm" class="form-control"
                 placeholder="Password Confirm" required>
 
+            <label for="role_id" class="sr-only">Select Role</label>
+            <select v-model="role_id" class="form-control mb-2" id="role_id" required>
+                <option value="3">Viewer</option>
+            </select>
+
             <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
             <p class="mt-5 mb-3 text-muted">Already Login </p>
         </form>
@@ -31,6 +36,8 @@
 </template>
 
 <script>
+
+import axios from 'axios';
 
 export default {
     name: 'Register',
@@ -41,15 +48,28 @@ export default {
             lastName: '',
             email: '',
             password: '',
-            passwordConfirm: ''
+            passwordConfirm: '',
+            role_id: 3,
         }
     },
 
     methods: {
-        submit() {
-            console.log(this.firstName, this.lastName, this.email, this.password, this.passwordConfirm);
-        }
+        async submit() {
+            const result = axios.post('register', {
+                first_name: this.firstName,
+                last_name: this.lastName,
+                email: this.email,
+                password: this.password,
+                password_confirmation: this.passwordConfirm,
+                role_id: this.role_id
+            });
+
+            console.log((await result).data.message);
+            await this.$router.push('login');
+        },
+
     },
+
 
 }
 </script>
